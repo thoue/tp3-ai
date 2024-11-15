@@ -15,10 +15,13 @@ def demander_preference(personne):
 
 # Fonction pour demander les détails de la sortie
 def demander_details_sortie():
-    date_heure = input("Quand souhaitez-vous aller au cinéma ? (Date et heure) : ")
+    jour = input("Quel jour de la semaine préférez-vous ? : ")
+    heure = input("À quelle heure souhaitez-vous regarder le film ? : ")
     lieu = input("Quel cinéma ou quelle zone géographique privilégiez-vous ? : ")
     participants = int(input("Combien de personnes seront présentes ? : "))
     budget = float(input("Quel est le budget par personne pour les billets et les collations ? : "))
+    nom_film = input("Quel film souhaitez-vous regarder ? : ")
+    acteur = input("Avez-vous une préférence pour un acteur ou une actrice ? : ")
     
     engine.assert_('sortie', (date_heure, lieu, participants, budget))  # Affirmer les détails de la sortie comme un fait
     return participants
