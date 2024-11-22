@@ -1,4 +1,3 @@
-
 from pyke import knowledge_engine
 
 # Initialiser le moteur Pyke
