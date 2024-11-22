@@ -48,27 +48,65 @@ movie('Avengers: Infinity War', 'Robert Downey Jr.', 8.4, 'Ste-Foy', 'Action').
 movie('Toy Story', 'Tom Hanks', 8.3, 'Beauport', 'Animation').
 movie('The Wolf of Wall Street', 'Leonardo DiCaprio', 8.2, 'Limoilou', 'Biography').
 movie('The Social Network', 'Jesse Eisenberg', 7.8, 'Ste-Foy', 'Biography').
+movie('Cats', 'James Corden', 2.7, 'Limoilou', 'Musical').
+movie('The Room', 'Tommy Wiseau', 3.7, 'Ste-Foy', 'Drama').
+movie('Disaster Movie', 'Matt Lanter', 1.9, 'Beauport', 'Comedy').
+movie('Birdemic: Shock and Terror', 'Alan Bagh', 1.8, 'Ste-Foy', 'Horror').
+movie('Battlefield Earth', 'John Travolta', 2.5, 'Limoilou', 'Sci-Fi').
+movie('Manos: The Hands of Fate', 'Tom Neyman', 1.6, 'Beauport', 'Horror').
+movie('Movie 43', 'Hugh Jackman', 4.3, 'Ste-Foy', 'Comedy').
+movie('Dragonball Evolution', 'Justin Chatwin', 2.6, 'Limoilou', 'Action').
+movie('Superbabies: Baby Geniuses 2', 'Jon Voight', 1.9, 'Beauport', 'Comedy').
+movie('Gigli', 'Ben Affleck', 2.6, 'Ste-Foy', 'Romance').
+movie('The Love Guru', 'Mike Myers', 3.8, 'Limoilou', 'Comedy').
+movie('House of the Dead', 'Jonathan Cherry', 2.1, 'Beauport', 'Horror').
+movie('Alone in the Dark', 'Christian Slater', 2.4, 'Ste-Foy', 'Horror').
+movie('Son of the Mask', 'Jamie Kennedy', 2.2, 'Limoilou', 'Comedy').
+movie('Kirk Cameron\'s Saving Christmas', 'Kirk Cameron', 1.3, 'Beauport', 'Family').
+movie('Epic Movie', 'Kal Penn', 2.4, 'Ste-Foy', 'Comedy').
+movie('The Wicker Man', 'Nicolas Cage', 3.7, 'Limoilou', 'Thriller').
+movie('Battle: Los Angeles', 'Aaron Eckhart', 5.7, 'Beauport', 'Action').
+movie('Pixels', 'Adam Sandler', 5.6, 'Ste-Foy', 'Comedy').
+movie('Transformers: Revenge of the Fallen', 'Shia LaBeouf', 6.0, 'Limoilou', 'Action').
+movie('The Happening', 'Mark Wahlberg', 5.0, 'Beauport', 'Thriller').
+movie('Fantastic Four', 'Miles Teller', 4.3, 'Ste-Foy', 'Sci-Fi').
+movie('Ghost Rider: Spirit of Vengeance', 'Nicolas Cage', 4.3, 'Limoilou', 'Action').
+movie('Suicide Squad', 'Will Smith', 5.9, 'Beauport', 'Action').
+movie('The Twilight Saga: New Moon', 'Kristen Stewart', 4.7, 'Ste-Foy', 'Fantasy').
+movie('Batman & Robin', 'George Clooney', 3.7, 'Limoilou', 'Action').
+movie('The Last Airbender', 'Noah Ringer', 4.1, 'Beauport', 'Adventure').
+movie('Jaws: The Revenge', 'Michael Caine', 3.0, 'Ste-Foy', 'Thriller').
+movie('50 Shades of Grey', 'Dakota Johnson', 4.1, 'Limoilou', 'Romance').
+movie('The Emoji Movie', 'T.J. Miller', 3.3, 'Beauport', 'Animation').
 
 % Facts about movie theaters: movie_theater(Location, Price, Hours, Days, Movies).
 movie_theater('Ste-Foy', 12.50, ['12:00', '15:30', '20:00'], ['Monday', 'Wednesday', 'Saturday'], [
     'The Shawshank Redemption', 'The Godfather Part II', 'The Lord of the Rings: The Return of the King', 
     'Forrest Gump', 'Fight Club', 'The Silence of the Lambs', 'Saving Private Ryan', 
     'The Usual Suspects', 'The Pianist', 'American History X', 'The Prestige', 'Django Unchained', 
-    'Coco', 'Avengers: Infinity War', 'The Social Network'
+    'Coco', 'Avengers: Infinity War', 'The Social Network', 'The Room', 'Birdemic: Shock and Terror', 
+    'Movie 43', 'Gigli', 'Epic Movie', 'Pixels', 'Fantastic Four', 'The Twilight Saga: New Moon', 
+    'Jaws: The Revenge'
 ]).
 
 movie_theater('Beauport', 10.00, ['13:00', '17:00', '21:30'], ['Tuesday', 'Friday', 'Sunday'], [
     'The Godfather', '12 Angry Men', 'Pulp Fiction', 'The Empire Strikes Back', 
     'One Flew Over the Cuckoo\'s Nest', 'Se7en', 'Life Is Beautiful', 'Terminator 2: Judgment Day', 
     'The Departed', 'The Dark Knight Rises', 'The Shining', 'Toy Story', 
-    'The Wolf of Wall Street'
+    'The Wolf of Wall Street', 'Disaster Movie', 'Manos: The Hands of Fate', 
+    'Superbabies: Baby Geniuses 2', 'House of the Dead', 'Kirk Cameron\'s Saving Christmas', 
+    'Battle: Los Angeles', 'The Happening', 'Suicide Squad', 'The Last Airbender', 
+    'The Emoji Movie'
 ]).
 
 movie_theater('Limoilou', 9.75, ['11:00', '14:30', '19:00'], ['Wednesday', 'Thursday', 'Saturday'], [
     'The Dark Knight', 'Schindler\'s List', 'The Lord of the Rings: The Fellowship of the Ring', 
     'Inception', 'The Lord of the Rings: The Two Towers', 'The Matrix', 'Parasite', 
     'Interstellar', 'City of God', 'Spirited Away', 'Gladiator', 'Whiplash', 
-    'Avengers: Endgame', 'WALL·E', 'Joker'
+    'Avengers: Endgame', 'WALL·E', 'Joker', 'Cats', 'Battlefield Earth', 
+    'Dragonball Evolution', 'The Love Guru', 'Son of the Mask', 'The Wicker Man', 
+    'Transformers: Revenge of the Fallen', 'Ghost Rider: Spirit of Vengeance', 
+    'Batman & Robin', '50 Shades of Grey'
 ]).
 
 % Facts about snacks: snacks(Name, Price).
