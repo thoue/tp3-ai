@@ -80,11 +80,11 @@ movie('50 Shades of Grey', 'Dakota Johnson', 4.1, 'Limoilou', 'Romance', 'R').
 movie('The Emoji Movie', 'T.J. Miller', 3.3, 'Beauport', 'Animation', 'PG').
 
 % Facts about movie theaters: movie_theater(Location, Price, Hours, Days).
-movie_theater('Ste-Foy', 12.50, ['12:00', '15:30', '20:00'], ['Monday', 'Wednesday', 'Saturday']).
+movie_theater('Ste-Foy', 12.50, ['12:30', '15:30', '20:30'], ['Monday', 'Wednesday', 'Saturday']).
 
-movie_theater('Beauport', 10.00, ['13:00', '17:00', '21:30'], ['Tuesday', 'Friday', 'Sunday']).
+movie_theater('Beauport', 10.00, ['13:30', '17:30', '21:30'], ['Tuesday', 'Friday', 'Sunday']).
 
-movie_theater('Limoilou', 9.75, ['11:00', '14:30', '19:00'], ['Wednesday', 'Thursday', 'Saturday']).
+movie_theater('Limoilou', 9.75, ['11:30', '14:30', '19:30'], ['Wednesday', 'Thursday', 'Saturday']).
 
 % Facts about snacks: snacks(Name, Price).
 snack('Chips', 1.50).

@@ -2,6 +2,10 @@
 :- consult('knowledge_base.pl').
 :- consult('utility.pl').
 
+cls :- 
+    write('\33\[2J'),
+    write('\e[2J').
+
 :- dynamic available_days/1. % Permet de déclarer un jour de la semaine comme étant disponible
 
 % Jour de la semaine
@@ -12,10 +16,6 @@ weekday(4, 'Jeudi').
 weekday(5, 'Vendredi').
 weekday(6, 'Samedi').
 weekday(7, 'Dimanche').
-
-cls :- 
-    write('\33\[2J'),
-    write('\e[2J').
 
 handle_weekdays_question :-
     write('Quelles jours de la semaine êtes-vous disponible?'), nl, nl,
@@ -63,7 +63,7 @@ start_ui :-
 
     cls,
     typewriter_write('Bonjour '), typewriter_write(Name), typewriter_write('!'), nl,
-    nl, write('(Appuyez sur une touche pour continuer...)'), nl,
+    nl, nl,
 
     handle_weekdays_question.
 
