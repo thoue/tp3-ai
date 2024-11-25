@@ -80,34 +80,11 @@ movie('50 Shades of Grey', 'Dakota Johnson', 4.1, 'Limoilou', 'Romance').
 movie('The Emoji Movie', 'T.J. Miller', 3.3, 'Beauport', 'Animation').
 
 % Facts about movie theaters: movie_theater(Location, Price, Hours, Days, Movies).
-movie_theater('Ste-Foy', 12.50, ['12:00', '15:30', '20:00'], ['Monday', 'Wednesday', 'Saturday'], [
-    'The Shawshank Redemption', 'The Godfather Part II', 'The Lord of the Rings: The Return of the King', 
-    'Forrest Gump', 'Fight Club', 'The Silence of the Lambs', 'Saving Private Ryan', 
-    'The Usual Suspects', 'The Pianist', 'American History X', 'The Prestige', 'Django Unchained', 
-    'Coco', 'Avengers: Infinity War', 'The Social Network', 'The Room', 'Birdemic: Shock and Terror', 
-    'Movie 43', 'Gigli', 'Epic Movie', 'Pixels', 'Fantastic Four', 'The Twilight Saga: New Moon', 
-    'Jaws: The Revenge'
-]).
+movie_theater('Ste-Foy', 12.50, ['12:00', '15:30', '20:00'], ['Monday', 'Wednesday', 'Saturday']).
 
-movie_theater('Beauport', 10.00, ['13:00', '17:00', '21:30'], ['Tuesday', 'Friday', 'Sunday'], [
-    'The Godfather', '12 Angry Men', 'Pulp Fiction', 'The Empire Strikes Back', 
-    'One Flew Over the Cuckoo\'s Nest', 'Se7en', 'Life Is Beautiful', 'Terminator 2: Judgment Day', 
-    'The Departed', 'The Dark Knight Rises', 'The Shining', 'Toy Story', 
-    'The Wolf of Wall Street', 'Disaster Movie', 'Manos: The Hands of Fate', 
-    'Superbabies: Baby Geniuses 2', 'House of the Dead', 'Kirk Cameron\'s Saving Christmas', 
-    'Battle: Los Angeles', 'The Happening', 'Suicide Squad', 'The Last Airbender', 
-    'The Emoji Movie'
-]).
+movie_theater('Beauport', 10.00, ['13:00', '17:00', '21:30'], ['Tuesday', 'Friday', 'Sunday']).
 
-movie_theater('Limoilou', 9.75, ['11:00', '14:30', '19:00'], ['Wednesday', 'Thursday', 'Saturday'], [
-    'The Dark Knight', 'Schindler\'s List', 'The Lord of the Rings: The Fellowship of the Ring', 
-    'Inception', 'The Lord of the Rings: The Two Towers', 'The Matrix', 'Parasite', 
-    'Interstellar', 'City of God', 'Spirited Away', 'Gladiator', 'Whiplash', 
-    'Avengers: Endgame', 'WALL·E', 'Joker', 'Cats', 'Battlefield Earth', 
-    'Dragonball Evolution', 'The Love Guru', 'Son of the Mask', 'The Wicker Man', 
-    'Transformers: Revenge of the Fallen', 'Ghost Rider: Spirit of Vengeance', 
-    'Batman & Robin', '50 Shades of Grey'
-]).
+movie_theater('Limoilou', 9.75, ['11:00', '14:30', '19:00'], ['Wednesday', 'Thursday', 'Saturday']).
 
 % Facts about snacks: snacks(Name, Price).
 snacks('Chips', 1.50).
