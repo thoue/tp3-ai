@@ -87,9 +87,8 @@ movie_theater('Beauport', 10.00, ['AM', 'PM', 'Soir'], ['Mardi', 'Vendredi', 'Di
 movie_theater('Limoilou', 9.75, ['AM', 'PM', 'Soir'], ['Mardi', 'Mercredi', 'Jeudi', 'Samedi']).
 
 % Facts about snacks: snacks(Name, Price).
-snack('Chips', 1.50).
-snack('Chocolat', 2.25).
-snack('Popcorn', 5.00).
-snack('Liqueur', 1.25).
-snack('Bonbons', 3.00).
-snack('Nachos', 6.50).
+snack('Combo #1', 2.50).
+snack('Combo #2', 5.00).
+snack('Combo #3', 7.50).
+snack('Combo #4', 12.50).
+
