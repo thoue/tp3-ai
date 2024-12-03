@@ -1,120 +1,172 @@
-%Importe la knowledge base
+:- use_module(library(readutil)).
+
+% Importe la knowledge base
 :- consult('knowledge_base.pl').
 :- consult('utility.pl').
 
-:- dynamic available_days/1. % Permet de déclarer un jour de la semaine comme étant disponible
-:- dynamic available_hours/1. % Permet de déclarer une plage horaire comme étant disponible
-:- dynamic available_genres/1. % Permet de déclarer un genre de film comme étant disponible
+
+:- dynamic occasion/1. % Permet de déclarer une occasion comme étant sélectionnée.
+:- dynamic children/1. % Permet de déclarer si des enfants sont présents dans le groupe.
+:- dynamic group_size/1. % Permet de déclarer la taille du groupe. 
+:- dynamic classic_or_newer/1. % Permet de déclarer si le groupe veut voir un classique ou un nouveau film. 
+:- dynamic good_or_bad/1. % Permet de déclarer si le groupe veut voir un film de qualité ou médiocre.
+:- dynamic budget/1. % Permet de déclarer le budget par personne.
 
 cls :- 
     write('\33\[2J'),
     write('\e[2J').
 
-handle_weekdays_question :-
-    write('Quelles jours de la semaine êtes-vous disponible?'), nl, nl,
-    write_day(1, 'Lundi'),
-    write_day(2, 'Mardi'),
-    write_day(3, 'Mercredi'),
-    write_day(4, 'Jeudi'),
-    write_day(5, 'Vendredi'),
-    write_day(6, 'Samedi'),
-    write_day(7, 'Dimanche'),
-    typewriter_write('0. Question suivante'), nl,
-    typewriter_write('Veuillez choisir un numéro correspondant à un jour de la semaine:'), nl,
-    read(Day),
+handle_occasion_question :- 
+    write('Pour quelle occasion venez-vous au cinema?'), nl, nl,
+    write_occasion(1, 'En famille'),
+    write_occasion(2, 'En couple'),
+    write_occasion(3, 'Entre amis'),
+    write_occasion(4, 'Seul'),
+    typewriter_write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
+    read(Occasion),
     cls,
-    (Day < 0 ; Day > 7 -> 
-        true
+    (Occasion < 1 ; Occasion > 4 -> 
+        handle_occasion_question
     ; 
-        (Day \= 0 ->
-            (available_days(Day) -> 
-                retract(available_days(Day))
-            ;   
-                assert(available_days(Day))),
-            handle_weekdays_question
+        (retractall(occasion(_)), assert(occasion(Occasion))),
+        (Occasion = 2 -> 
+            retractall(children(_)), assert(children(2)),
+            retractall(group_size(_)), assert(group_size(2)),
+            handle_classic_or_newer_question
         ; 
-            true
+        Occasion = 4 -> 
+            retractall(children(_)), assert(children(2)),
+            retractall(group_size(_)), assert(group_size(1)),
+            handle_classic_or_newer_question
+        ; 
+            handle_children_question
         )
     ).
 
-handle_schedule_question :-
-    write('Quelle(s) plage(s) horaire(s) vous convient?'), nl, nl,
-    write_schedule(1, 'AM'),
-    write_schedule(2, 'PM'),
-    write_schedule(3, 'Soir'),
-    typewriter_write('0. Question suivante'), nl,
-    typewriter_write('Veuillez choisir un numéro correspondant à une plage horaire:'), nl,
-    read(Hours),
+handle_occasion_question :- 
+    write('Pour quelle occasion venez-vous au cinema?'), nl, nl,
+    write_occasion(1, 'En famille'),
+    write_occasion(2, 'En couple'),
+    write_occasion(3, 'Entre amis'),
+    write_occasion(4, 'Seul'),
+    typewriter_write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
+    read(Occasion),
     cls,
-    (Hours < 0 ; Hours > 3 -> 
-        true
+    (Occasion < 1 ; Occasion > 4 -> 
+        handle_occasion_question
+    ; 
+        (retractall(occasion(_)), assert(occasion(Occasion))),
+        (Occasion = 2 -> 
+            retractall(children(_)), assert(children(2)),
+            retractall(group_size(_)), assert(group_size(2)),
+            handle_classic_or_newer_question
+        ; 
+        Occasion = 4 -> 
+            retractall(children(_)), assert(children(2)),
+            retractall(group_size(_)), assert(group_size(1)),
+            handle_classic_or_newer_question
+        ; 
+            handle_children_question
+        )
+    ).
+
+handle_children_question :- 
+    write('Est-ce qu\'il y a des enfants dans le groupe?'), nl, nl,
+    write_children(1, 'Oui'),
+    write_children(2, 'Non'),
+    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    read(Children),
+    cls,
+    (Children < 1 ; Children > 2 -> 
+        handle_children_question
+    ; 
+        (retractall(children(_)), assert(children(Children))),
+        handle_group_size_question
+    ).
+
+handle_group_size_question :- 
+    write('Combien de personnes serez-vous?'), nl,
+    write('Veuillez entrer un nombre de personnes:'), nl,
+    read(GroupSize),
+    (GroupSize < 1 -> 
+        write('Erreur: Veuillez entrer un nombre valide de personnes. ( > 0 )'), nl,
+        handle_group_size_question
     ;
-        (Hours \= 0 ->
-            (available_hours(Hours) -> 
-                retract(available_hours(Hours))
-            ;   
-                assert(available_hours(Hours))),
-            handle_schedule_question
-        ; 
-            true
-        )
-    ).
-
-handle_genre_question :-
-    write('Quel(s) genre(s) de film préférez-vous aller voir?'), nl, nl,
-    write_genre(1, 'Action'),
-    write_genre(2, 'Drame'),
-    write_genre(3, 'Crime'),
-    write_genre(4, 'Western'),
-    write_genre(5, 'Horreur'),
-    write_genre(6, 'Animation'),
-    write_genre(7, 'Biographie'),
-    write_genre(8, 'Comédie'),
-    write_genre(9, 'Musical'),
-    write_genre(10, 'Thriller'),
-    write_genre(11, 'Sci-Fi'),
-    write_genre(12, 'Famille'),
-    write_genre(13, 'Fantaisie'),
-    write_genre(14, 'Romance'),
-    write_genre(15, 'Aventure'),
-    typewriter_write('0. Question suivante'), nl,
-    typewriter_write('Veuillez choisir un numéro correspondant à un genre de film:'), nl,
-    read(Genre),
+    assert(group_size(GroupSize)),
     cls,
-    (Genre < 0 ; Genre > 15 -> 
-        true
-    ;   
-        (Genre \= 0 ->
-            (available_genres(Genre) -> 
-                retract(available_genres(Genre))
-            ;   
-                assert(available_genres(Genre))),
-            handle_genre_question
-        ; 
-            true
-        )
+    handle_classic_or_newer_question
     ).
 
-handle_budget_question :-
+handle_classic_or_newer_question :- 
+    write('Voulez-vous voir un classique ou un nouveau film?'), nl, nl,
+    write_classic_or_newer(1, 'Classique'),
+    write_classic_or_newer(2, 'Nouveauté'),
+    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    read(ClassicOrNewer),
+    cls,
+    (ClassicOrNewer < 1 ; ClassicOrNewer > 2 -> 
+        handle_classic_or_newer_question
+    ; 
+        (retractall(classic_or_newer(_)), assert(classic_or_newer(ClassicOrNewer))),
+        handle_good_or_bad_question
+    ).
+
+handle_good_or_bad_question :- 
+    write('Voulez-vous voir un film de qualité ou médiocre?'), nl, nl,
+    write_good_or_bad(1, 'Qualité'),
+    write_good_or_bad(2, 'Médiocre'),
+    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    read(GoodOrBad),
+    cls,
+    (GoodOrBad < 0 ; GoodOrBad > 2 -> 
+        handle_good_or_bad_question
+    ;
+        (retractall(good_or_bad(_)), assert(good_or_bad(GoodOrBad))),
+        handle_budget_question
+    ).
+
+handle_budget_question :- 
     write('Quel est votre budget pour la sortie au cinema?'), nl,
     write('Veuillez entrer un montant en dollars:'), nl,
     read(Budget),
-    cls.
+    (Budget < 0 -> 
+        write('Erreur: Veuillez entrer un montant valide en dollars. ( > 0 )'), nl,
+        handle_budget_question
+    ;
+    assert(budget(Budget)),
+    cls,
+    give_results
+    ).
 
-write_day(Number, DayName) :-
-    typewriter_write(Number), typewriter_write('. '), typewriter_write(DayName),
-    (available_days(Number) -> typewriter_write(' \033[32m(Déjà sélectionné)\033[0m') ; true), nl.
+give_results :-
+    write('Prints results here'), nl,
+    true.
 
-write_schedule(Number, ScheduleName) :-
-    typewriter_write(Number), typewriter_write('. '), typewriter_write(ScheduleName),
-    (available_hours(Number) -> typewriter_write(' \033[32m(Déjà sélectionné)\033[0m') ; true), nl.
+write_occasion(Num, Occasion) :- 
+    typewriter_write(Num), write('. '), typewriter_write(Occasion), nl.
 
-write_genre(Number, GenreName) :-    
-    typewriter_write(Number), typewriter_write('. '), typewriter_write(GenreName),
-    (available_genres(Number) -> typewriter_write(' \033[32m(Déjà sélectionné)\033[0m') ; true), nl.
+write_children(Num, Children) :- 
+    typewriter_write(Num), write('. '), typewriter_write(Children), nl.
 
-%Interface principal
-start_ui :-
+write_classic_or_newer(Num, ClassicOrNewer) :- 
+    typewriter_write(Num), write('. '), typewriter_write(ClassicOrNewer), nl.
+
+write_good_or_bad(Num, GoodOrBad) :- 
+    typewriter_write(Num), write('. '), typewriter_write(GoodOrBad), nl.
+
+write_budget(Budget) :- 
+    typewriter_write('Votre budget est de '), typewriter_write(Budget), typewriter_write('$'), nl.
+
+clear_all_facts :- 
+    retractall(occasion(_)),
+    retractall(children(_)),
+    retractall(group_size(_)),
+    retractall(classic_or_newer(_)),
+    retractall(good_or_bad(_)),
+    retractall(budget(_)).
+
+% Interface principal
+start_ui :- 
     cls,
     typewriter_write('Bienvenue dans le système de planification de sortie au cinema!'), nl,
     typewriter_write('Veuillez répondre aux questions suivantes pour obtenir des recommandations de films.'), nl,
@@ -129,29 +181,9 @@ start_ui :-
     cls,
     typewriter_write('Bonjour '), typewriter_write(Name), nl,
     nl, write('(Appuyez sur une touche pour continuer...)'), nl,
+    get_single_char(_),
 
-    handle_weekdays_question,
-    handle_schedule_question,
-    handle_genre_question.
-    
-
-    % write('Quel est votre budget pour la sortie au cinema?'), nl,
-    % read(_),
-
-    % write('Dans quel cinema preferez-vous aller?'), nl,
-    % read(_), % a implementer ajouter la loop pour les cinemas
-
-    % write('Voulez-vous des collations?'), nl,
-    % read(_), % a implementer ajouter la loop pour les collations (yes/no)
-
-    % write('Voulez-vous voir un film mediocre ou seulement les meilleurs?'), nl,
-    % read(_), % a implementer ajouter la loop pour le rating (1 = mediocre, 2= meilleur)
-
-    % write('Quel acteur preferez-vous? Ex: Brad Pitt'), nl,
-    % read(_).
-
-clear_all_facts :-
-    retractall(available_days(_)).
+    handle_occasion_question.
 
 :- clear_all_facts.
 :- start_ui.
