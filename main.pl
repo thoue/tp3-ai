@@ -1,8 +1,9 @@
 :- use_module(library(readutil)).
 
 % Importe la knowledge base
-:- consult('knowledge_base.pl').
+:- consult('movies.pl').
 :- consult('utility.pl').
+:- consult('shell.pl').
 
 :- dynamic occasion/1. % Permet de déclarer une occasion comme étant sélectionnée.
 :- dynamic enfant/1. % Permet de déclarer si des enfants sont présents dans le groupe.
@@ -24,6 +25,9 @@ cls :-
     write('\33\[2J'),
     write('\e[2J').
 
+end_question :-
+    true.
+
 %Fonctions d'occasion
 occasion_mapping(1, famille).
 occasion_mapping(2, couple).
@@ -43,15 +47,11 @@ handle_occasion_question :-
         handle_occasion_question
     ; 
         occasion_mapping(Occasion, OccasionText),
-        (retractall(occasion(_)), assert(occasion(OccasionText))),
+        (retractall(occasion(_)), asserta(fait(occasion(OccasionText)))),
         (OccasionText = couple -> 
-            retractall(enfant(_)), assert(enfant(2)),
-            retractall(taille_du_groupe(_)), assert(taille_du_groupe(2)),
             handle_aime_vieux_films_question
         ; 
         OccasionText = seul -> 
-            retractall(enfant(_)), assert(enfant(2)),
-            retractall(taille_du_groupe(_)), assert(taille_du_groupe(1)),
             handle_aime_vieux_films_question
         ; 
             handle_enfant_question
@@ -73,7 +73,7 @@ handle_enfant_question :-
     (Enfant < 1 ; Enfant > 2 -> 
         handle_enfant_question
     ; 
-        (retractall(enfant(_)), assert(enfant(EnfantText))),
+        (retractall(enfant(_)), asserta(fait(enfant(EnfantText)))),
         handle_taille_du_groupe_question
     ).
 
@@ -85,7 +85,7 @@ handle_taille_du_groupe_question :-
         write('Erreur: Veuillez entrer un nombre valide de personnes. ( > 0 )'), nl,
         handle_taille_du_groupe_question
     ;
-    assert(taille_du_groupe(GroupSize)),
+    asserta(fait(taille_du_groupe(GroupSize))),
     cls,
     handle_aime_vieux_films_question
     ).
@@ -105,8 +105,8 @@ handle_aime_vieux_films_question :-
     (LikeOldMovies < 1 ; LikeOldMovies > 2 -> 
         handle_aime_vieux_films_question
     ;
-        (retractall(aime_vieux_films(_)), assert(aime_vieux_films(LikeOldMoviesText))),
-        handle_bon_ou_mauvais_question
+        (retractall(aime_vieux_films(_)), asserta(fait(aime_vieux_films(LikeOldMoviesText)))),
+        handle_budget_question
     ).
 
 %Fonctions de bon_ou_mauvais
@@ -124,26 +124,26 @@ handle_bon_ou_mauvais_question :-
     (GoodOrBad < 0 ; GoodOrBad > 2 -> 
         handle_bon_ou_mauvais_question
     ;
-        (retractall(bon_ou_mauvais(_)), assert(bon_ou_mauvais(GoodOrBadText))),
-        handle_budget_question
+        (retractall(bon_ou_mauvais(_)), asserta(fait(bon_ou_mauvais(GoodOrBadText)))),
+        end_question
     ).
 
 handle_budget_question :- 
     write('Quel est votre budget pour la sortie au cinema?'), nl,
     write('Veuillez entrer un montant en dollars:'), nl,
     read(Budget),
+    cls,
     (Budget < 0 -> 
         write('Erreur: Veuillez entrer un montant valide en dollars. ( > 0 )'), nl,
         handle_budget_question
     ;
-    assert(budget(Budget)),
-    cls,
-    give_results
+        asserta(fait(budget(Budget))),
+        (Budget > 9 -> 
+            handle_bon_ou_mauvais_question
+        ;
+            end_question
+        )
     ).
-
-give_results :-
-    write('Prints results here'), nl,
-    true.
 
 write_occasion(Num, Occasion) :- 
     typewriter_write(Num), write('. '), typewriter_write(Occasion), nl.
@@ -161,12 +161,7 @@ write_budget(Budget) :-
     typewriter_write('Votre budget est de '), typewriter_write(Budget), typewriter_write('$'), nl.
 
 clear_all_facts :- 
-    retractall(occasion(_)),
-    retractall(enfant(_)),
-    retractall(taille_du_groupe(_)),
-    retractall(aime_vieux_films(_)),
-    retractall(bon_ou_mauvais(_)),
-    retractall(budget(_)).
+    retractall(fait(_)).
 
 % Interface principal
 start_ui :- 
@@ -186,7 +181,38 @@ start_ui :-
     nl, write('(Appuyez sur une touche pour continuer...)'), nl,
     get_single_char(_),
 
-    handle_occasion_question.
+    handle_occasion_question,
+
+    ch_avant,
+    
+    fait(heures(HeuresList)),
+    fait(cinema(CinemaList)),
+    fait(cote_film(CoteList)),
+    fait(journee(JourneeList)),
+    fait(collation(Collation)),
+    fait(genres(GenreList)),
+
+    findall((Titre, Cinema, Genre, Cote, Heures), (
+        movie(Titre, Cinema, Genre, Cote, Heures),
+        member(Cinema, CinemaList),
+        member(Genre, GenreList),
+        member(Cote, CoteList),
+        member(Heures, HeuresList)
+    ), FilmFiltre),
+
+    format('---------------------------~n'),
+    afficher_films(FilmFiltre).
+
+
+afficher_films([]).
+afficher_films([(Titre, Cinema, Genre, Cote, Heures) | Rest]) :-
+    format('Titre: ~w~n', [Titre]),
+    format('Cinéma: ~w~n', [Cinema]),
+    format('Genre: ~w~n', [Genre]),
+    format('Cote: ~w~n', [Cote]),
+    format('Heures: ~w~n', [Heures]),
+    format('---------------------------~n'),
+    afficher_films(Rest).
 
 :- clear_all_facts.
 :- start_ui.
