@@ -12,7 +12,7 @@ si occasion(famille) et enfant(oui) alors genres([aventure, comedie, animation])
 si occasion(famille) et enfant(non) alors genres([action, western, thriller, sci_fi, horreur, guerre, fantaisie, famille, drame, crime, comedie, biographie, aventure, animation]).
 si occasion(couple) alors genres([romance, horreur]).
 si occasion(seul) ou occasion(couple) alors enfant(non).
-si occasion(seul) ou occasion(amis) alors genre([action, western, thriller, sci_fi, horreur, guerre, fantaisie, famille, drame, crime, comedie, biographie, aventure, animation, romance]).
+si occasion(seul) ou occasion(amis) alors genres([action, western, thriller, sci_fi, horreur, guerre, fantaisie, famille, drame, crime, comedie, biographie, aventure, animation, romance]).
 si aime_vieux_films(oui) alors plus_petit_que_année_2000(oui). 
 si aime_vieux_films(non) alors plus_petit_que_année_2000(non).
 si enfant(oui) ou taille_du_groupe(X) et (X > 5) alors langue_film(francais).
@@ -39,7 +39,7 @@ ch_avant :-
     %write('nouveau fait : '), write(X),nl,
     asserta(fait(X)),
     ch_avant.
-ch_avant.
+ch_avant :- !.
 
 condition_vraie(C):- fait(C).
 condition_vraie(C1 et C2):- condition_vraie(C1), condition_vraie(C2).

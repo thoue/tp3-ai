@@ -44,6 +44,7 @@ handle_occasion_question :-
     read(Occasion),
     cls,
     (Occasion < 1 ; Occasion > 4 -> 
+        write('Veuillez entrer un des choix proposés...'), nl,
         handle_occasion_question
     ; 
         occasion_mapping(Occasion, OccasionText),
@@ -124,8 +125,7 @@ handle_bon_ou_mauvais_question :-
     (GoodOrBad < 0 ; GoodOrBad > 2 -> 
         handle_bon_ou_mauvais_question
     ;
-        (retractall(bon_ou_mauvais(_)), asserta(fait(bon_ou_mauvais(GoodOrBadText)))),
-        end_question
+        (retractall(bon_ou_mauvais(_)), asserta(fait(bon_ou_mauvais(GoodOrBadText))))
     ).
 
 handle_budget_question :- 
@@ -139,9 +139,10 @@ handle_budget_question :-
     ;
         asserta(fait(budget(Budget))),
         (Budget > 9 -> 
-            handle_bon_ou_mauvais_question
-        ;
-            end_question
+            handle_bon_ou_mauvais_question,
+            write('---- Fin du questionnaire ----'), nl, nl
+        ; 
+            write('---- Fin du questionnaire ----'), nl, nl
         )
     ).
 
@@ -184,33 +185,42 @@ start_ui :-
     handle_occasion_question,
 
     ch_avant,
-    
-    fait(heures(HeuresList)),
-    fait(cinema(CinemaList)),
-    fait(cote_film(CoteList)),
-    fait(journee(JourneeList)),
-    fait(collation(Collation)),
-    fait(genres(GenreList)),
 
-    findall((Titre, Cinema, Genre, Cote, Heures), (
-        movie(Titre, Cinema, Genre, Cote, Heures),
+    fait(cinema(CinemaList)),
+    fait(genres(GenresList)),
+    fait(cote_film(CoteList)),
+    fait(heures(HeuresList)),
+    fait(plus_petit_que_année_2000(OldMovies)),
+    fait(journee(JourneeList)),
+
+    fait(collation(Collation)),
+
+    write(CinemaList),
+
+    findall((Titre, Cinema, Genre, Cote, Heures, Annee, JourneeInter), (
+        movie(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo),
         member(Cinema, CinemaList),
-        member(Genre, GenreList),
+        member(Genre, GenresList),
         member(Cote, CoteList),
-        member(Heures, HeuresList)
+        member(Heures, HeuresList),
+        intersection(JourneeList, Journee, JourneeInter),
+        JourneeInter \= []
     ), FilmFiltre),
 
+    write('Voici les recommandations'), nl,
     format('---------------------------~n'),
     afficher_films(FilmFiltre).
-
+    
 
 afficher_films([]).
-afficher_films([(Titre, Cinema, Genre, Cote, Heures) | Rest]) :-
+afficher_films([(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo) | Rest]) :-
     format('Titre: ~w~n', [Titre]),
     format('Cinéma: ~w~n', [Cinema]),
     format('Genre: ~w~n', [Genre]),
     format('Cote: ~w~n', [Cote]),
     format('Heures: ~w~n', [Heures]),
+    format('Année de sortie: ~w~n', [Annee]),
+    format('Jours de projection: ~w~n', [JourneeDispo]),
     format('---------------------------~n'),
     afficher_films(Rest).
 
