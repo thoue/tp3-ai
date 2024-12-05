@@ -24,32 +24,11 @@ cls :-
     write('\33\[2J'),
     write('\e[2J').
 
-handle_occasion_question :- 
-    write('Pour quelle occasion venez-vous au cinema?'), nl, nl,
-    write_occasion(1, 'En famille'),
-    write_occasion(2, 'En couple'),
-    write_occasion(3, 'Entre amis'),
-    write_occasion(4, 'Seul'),
-    typewriter_write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
-    read(Occasion),
-    cls,
-    (Occasion < 1 ; Occasion > 4 -> 
-        handle_occasion_question
-    ; 
-        (retractall(occasion(_)), assert(occasion(Occasion))),
-        (Occasion = 2 -> 
-            retractall(enfant(_)), assert(enfant(2)),
-            retractall(taille_du_groupe(_)), assert(taille_du_groupe(2)),
-            handle_aime_vieux_films_question
-        ; 
-        Occasion = 4 -> 
-            retractall(enfant(_)), assert(enfant(2)),
-            retractall(taille_du_groupe(_)), assert(taille_du_groupe(1)),
-            handle_aime_vieux_films_question
-        ; 
-            handle_enfant_question
-        )
-    ).
+%Fonctions d'occasion
+occasion_mapping(1, famille).
+occasion_mapping(2, couple).
+occasion_mapping(3, amis).
+occasion_mapping(4, seul).
 
 handle_occasion_question :- 
     write('Pour quelle occasion venez-vous au cinema?'), nl, nl,
@@ -63,13 +42,14 @@ handle_occasion_question :-
     (Occasion < 1 ; Occasion > 4 -> 
         handle_occasion_question
     ; 
-        (retractall(occasion(_)), assert(occasion(Occasion))),
-        (Occasion = 2 -> 
+        occasion_mapping(Occasion, OccasionText),
+        (retractall(occasion(_)), assert(occasion(OccasionText))),
+        (OccasionText = couple -> 
             retractall(enfant(_)), assert(enfant(2)),
             retractall(taille_du_groupe(_)), assert(taille_du_groupe(2)),
             handle_aime_vieux_films_question
         ; 
-        Occasion = 4 -> 
+        OccasionText = seul -> 
             retractall(enfant(_)), assert(enfant(2)),
             retractall(taille_du_groupe(_)), assert(taille_du_groupe(1)),
             handle_aime_vieux_films_question
@@ -77,6 +57,10 @@ handle_occasion_question :-
             handle_enfant_question
         )
     ).
+
+%Fonctions d'enfant
+enfant_mapping(1, oui).
+enfant_mapping(2, non).
 
 handle_enfant_question :- 
     write('Est-ce qu\'il y a des enfants dans le groupe?'), nl, nl,
@@ -85,10 +69,11 @@ handle_enfant_question :-
     typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
     read(Enfant),
     cls,
+    enfant_mapping(Enfant, EnfantText),
     (Enfant < 1 ; Enfant > 2 -> 
         handle_enfant_question
     ; 
-        (retractall(enfant(_)), assert(enfant(Enfant))),
+        (retractall(enfant(_)), assert(enfant(EnfantText))),
         handle_taille_du_groupe_question
     ).
 
@@ -105,6 +90,10 @@ handle_taille_du_groupe_question :-
     handle_aime_vieux_films_question
     ).
 
+%Fonctions d'aime_vieux_films
+vieux_films_mapping(1, oui).
+vieux_films_mapping(2, non).
+
 handle_aime_vieux_films_question :- 
     write('Aimez-vous les vieux films?'), nl, nl,
     write_aime_vieux_films(1, 'Oui'),
@@ -112,12 +101,17 @@ handle_aime_vieux_films_question :-
     typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
     read(LikeOldMovies),
     cls,
+    vieux_films_mapping(LikeOldMovies, LikeOldMoviesText),
     (LikeOldMovies < 1 ; LikeOldMovies > 2 -> 
         handle_aime_vieux_films_question
     ;
-        (retractall(aime_vieux_films(_)), assert(aime_vieux_films(LikeOldMovies))),
+        (retractall(aime_vieux_films(_)), assert(aime_vieux_films(LikeOldMoviesText))),
         handle_bon_ou_mauvais_question
     ).
+
+%Fonctions de bon_ou_mauvais
+bon_ou_mauvais_mapping(1, bon).
+bon_ou_mauvais_mapping(2, mauvais).
 
 handle_bon_ou_mauvais_question :- 
     write('Voulez-vous voir un film de qualité ou médiocre?'), nl, nl,
@@ -126,10 +120,11 @@ handle_bon_ou_mauvais_question :-
     typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
     read(GoodOrBad),
     cls,
+    bon_ou_mauvais_mapping(GoodOrBad, GoodOrBadText),
     (GoodOrBad < 0 ; GoodOrBad > 2 -> 
         handle_bon_ou_mauvais_question
     ;
-        (retractall(bon_ou_mauvais(_)), assert(bon_ou_mauvais(GoodOrBad))),
+        (retractall(bon_ou_mauvais(_)), assert(bon_ou_mauvais(GoodOrBadText))),
         handle_budget_question
     ).
 
