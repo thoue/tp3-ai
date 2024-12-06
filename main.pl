@@ -106,7 +106,7 @@ handle_aime_vieux_films_question :-
     (LikeOldMovies < 1 ; LikeOldMovies > 2 -> 
         handle_aime_vieux_films_question
     ;
-        (retractall(aime_vieux_films(_)), asserta(fait(aime_vieux_films(LikeOldMoviesText)))),
+        asserta(fait(aime_vieux_films(LikeOldMoviesText))),
         handle_budget_question
     ).
 
@@ -165,7 +165,8 @@ clear_all_facts :-
     retractall(fait(_)).
 
 % Interface principal
-start_ui :- 
+start_questions :- 
+    clear_all_facts,
     cls,
     typewriter_write('Bienvenue dans le système de planification de sortie au cinema!'), nl,
     typewriter_write('Veuillez répondre aux questions suivantes pour obtenir des recommandations de films.'), nl,
@@ -184,33 +185,7 @@ start_ui :-
 
     handle_occasion_question,
 
-    ch_avant,
-
-    fait(cinema(CinemaList)),
-    fait(genres(GenresList)),
-    fait(cote_film(CoteList)),
-    fait(heures(HeuresList)),
-    fait(plus_petit_que_année_2000(OldMovies)),
-    fait(journee(JourneeList)),
-
-    fait(collation(Collation)),
-
-    write(CinemaList),
-
-    findall((Titre, Cinema, Genre, Cote, Heures, Annee, JourneeInter), (
-        movie(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo),
-        member(Cinema, CinemaList),
-        member(Genre, GenresList),
-        member(Cote, CoteList),
-        member(Heures, HeuresList),
-        intersection(JourneeList, Journee, JourneeInter),
-        JourneeInter \= []
-    ), FilmFiltre),
-
-    write('Voici les recommandations'), nl,
-    format('---------------------------~n'),
-    afficher_films(FilmFiltre).
-    
+    find_movies_and_show.
 
 afficher_films([]).
 afficher_films([(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo) | Rest]) :-
@@ -224,5 +199,31 @@ afficher_films([(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo) | Rest
     format('---------------------------~n'),
     afficher_films(Rest).
 
-:- clear_all_facts.
-:- start_ui.
+find_movies_and_show :- 
+    ch_avant,
+
+    fait(cinema(CinemaList)),
+    fait(genres(GenresList)),
+    fait(cote_film(CoteList)),
+    fait(heures(HeuresList)),
+    fait(plus_petit_que_année_2000(OldMovies)),
+    fait(journee(JourneeList)),
+
+    fait(collation(Collation)),
+
+    findall((Titre, Cinema, Genre, Cote, Heures, Annee, JourneeInter), (
+        movie(Titre, Cinema, Genre, Cote, Heures, Annee, JourneeDispo),
+        member(Cinema, CinemaList),
+        member(Genre, GenresList),
+        member(Cote, CoteList),
+        member(Heures, HeuresList),
+        (OldMovies = oui -> Annee < 2000 ; Annee >= 2000),
+        intersection(JourneeList, JourneeDispo, JourneeInter),
+        JourneeInter \= []
+    ), FilmFiltre),
+
+    snack(Collation, Description, Prix),
+    write('Voici les recommandations'), nl, nl,
+    write('Collation incluse : '), write(Description), write('  -  '), write(Prix), write(' $'), nl, 
+    format('---------------------------~n'),
+    afficher_films(FilmFiltre).

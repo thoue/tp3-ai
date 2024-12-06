@@ -9,10 +9,10 @@
 si occasion(seul) alors taille_du_groupe(1).
 si occasion(couple) alors taille_du_groupe(2).
 si occasion(famille) et enfant(oui) alors genres([aventure, comedie, animation]).
-si occasion(famille) et enfant(non) alors genres([action, western, thriller, sci_fi, horreur, guerre, fantaisie, famille, drame, crime, comedie, biographie, aventure, animation]).
+si occasion(famille) et enfant(non) alors genres([action, comedie, aventure, animation, horreur]).
 si occasion(couple) alors genres([romance, horreur]).
 si occasion(seul) ou occasion(couple) alors enfant(non).
-si occasion(seul) ou occasion(amis) alors genres([action, western, thriller, sci_fi, horreur, guerre, fantaisie, famille, drame, crime, comedie, biographie, aventure, animation, romance]).
+si occasion(seul) ou occasion(amis) alors genres([action, comedie, aventure, animation, romance, horreur]).
 si aime_vieux_films(oui) alors plus_petit_que_année_2000(oui). 
 si aime_vieux_films(non) alors plus_petit_que_année_2000(non).
 si enfant(oui) ou taille_du_groupe(X) et (X > 5) alors langue_film(francais).
@@ -28,7 +28,9 @@ si budget(X) et (X >= 10) et bon_ou_mauvais(bon) alors journee([vendredi, samedi
 si budget(X) et (X >= 10) et bon_ou_mauvais(mauvais) alors journee([lundi, mercredi, jeudi]).
 si budget(X) et (X < 12.25) alors collation(aucun).
 si budget(X) et (X >= 12.25) et (X < 14.75) alors collation(combo1).
-si budget(X) et (X >= 14.75) alors collation(combo2).
+si budget(X) et (X >= 14.75) et (X < 17.25) alors collation(combo2).
+si budget(X) et (X >= 17.25) et (X < 22.25) alors collation(combo2).
+si budget(X) et (X >= 22.25) alors collation(combo4).
 
 % Chainage avant
 ch_avant :- 
