@@ -35,6 +35,7 @@ movie('The Grudge', limoilou, horreur, r, soir, 2004, [lundi, mardi, mercredi]).
 movie('Indiana Jones and the Raiders of the Lost Ark', limoilou, aventure, pg, pm, 1981, [mardi, samedi]).
 
 % snacks(Name, Price).
+snack(aucun, 'Aucune collation incluse', 0.00).
 snack(combo1, 'Petit popcorn et soda', 2.50).
 snack(combo2, 'Petit popcorn, bonbon et soda', 5.00).
 snack(combo3, 'Grand popcorn, bonbon et soda', 7.50).

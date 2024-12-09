@@ -1,29 +1,8 @@
 :- use_module(library(readutil)).
 
-% Importe la knowledge base
+% Importe les films et la coquille
 :- consult('movies.pl').
-:- consult('utility.pl').
 :- consult('shell.pl').
-
-:- dynamic occasion/1. % Permet de déclarer une occasion comme étant sélectionnée.
-:- dynamic enfant/1. % Permet de déclarer si des enfants sont présents dans le groupe.
-:- dynamic taille_du_groupe/1. % Permet de déclarer la taille du groupe. 
-:- dynamic aime_vieux_films/1. % Permet de déclarer si le groupe aime les vieux films ou non
-:- dynamic bon_ou_mauvais/1. % Permet de déclarer si le groupe veut voir un film de qualité ou médiocre.
-:- dynamic budget/1. % Permet de déclarer le budget par personne.
-
-:- dynamic genres/1.
-:- dynamic plus_petit_que_année_2000/1.
-:- dynamic journee/1.
-:- dynamic langue_film/1.
-:- dynamic cinema/1.
-:- dynamic cote_film/1.
-:- dynamic heures/1.
-:- dynamic collation/1.
-
-cls :- 
-    write('\33\[2J'),
-    write('\e[2J').
 
 end_question :-
     true.
@@ -35,14 +14,14 @@ occasion_mapping(3, amis).
 occasion_mapping(4, seul).
 
 handle_occasion_question :- 
-    write('Pour quelle occasion venez-vous au cinema?'), nl, nl,
+    write('Question : Pour quelle occasion venez-vous au cinema?'), nl,
     write_occasion(1, 'En famille'),
     write_occasion(2, 'En couple'),
     write_occasion(3, 'Entre amis'),
     write_occasion(4, 'Seul'),
-    typewriter_write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
+    write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
     read(Occasion),
-    cls,
+    nl, nl,
     (Occasion < 1 ; Occasion > 4 -> 
         write('Veuillez entrer un des choix proposés...'), nl,
         handle_occasion_question
@@ -64,12 +43,12 @@ enfant_mapping(1, oui).
 enfant_mapping(2, non).
 
 handle_enfant_question :- 
-    write('Est-ce qu\'il y a des enfants dans le groupe?'), nl, nl,
+    write('Question : Est-ce qu\'il y a des enfants dans le groupe?'), nl,
     write_enfant(1, 'Oui'),
     write_enfant(2, 'Non'),
-    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
     read(Enfant),
-    cls,
+    nl, nl,
     enfant_mapping(Enfant, EnfantText),
     (Enfant < 1 ; Enfant > 2 -> 
         handle_enfant_question
@@ -79,15 +58,15 @@ handle_enfant_question :-
     ).
 
 handle_taille_du_groupe_question :- 
-    write('Combien de personnes serez-vous?'), nl,
-    write('Veuillez entrer un nombre de personnes:'), nl,
+    write('Question : Combien de personnes serez-vous?'), nl,
+    write('Veuillez entrer un nombre de personnes suivi d\'un point:'), nl,
     read(GroupSize),
     (GroupSize < 1 -> 
         write('Erreur: Veuillez entrer un nombre valide de personnes. ( > 0 )'), nl,
         handle_taille_du_groupe_question
     ;
     asserta(fait(taille_du_groupe(GroupSize))),
-    cls,
+    nl, nl,
     handle_aime_vieux_films_question
     ).
 
@@ -96,12 +75,12 @@ vieux_films_mapping(1, oui).
 vieux_films_mapping(2, non).
 
 handle_aime_vieux_films_question :- 
-    write('Aimez-vous les vieux films?'), nl, nl,
+    write('Question : Aimez-vous les vieux films?'), nl,
     write_aime_vieux_films(1, 'Oui'),
     write_aime_vieux_films(2, 'Non'),
-    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
     read(LikeOldMovies),
-    cls,
+    nl, nl,
     vieux_films_mapping(LikeOldMovies, LikeOldMoviesText),
     (LikeOldMovies < 1 ; LikeOldMovies > 2 -> 
         handle_aime_vieux_films_question
@@ -115,12 +94,12 @@ bon_ou_mauvais_mapping(1, bon).
 bon_ou_mauvais_mapping(2, mauvais).
 
 handle_bon_ou_mauvais_question :- 
-    write('Voulez-vous voir un film de qualité ou médiocre?'), nl, nl,
+    write('Question : Voulez-vous voir un film de qualité ou médiocre?'), nl,
     write_bon_ou_mauvais(1, 'Qualité'),
     write_bon_ou_mauvais(2, 'Médiocre'),
-    typewriter_write('Veuillez choisir un numéro correspondant à une réponse:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
     read(GoodOrBad),
-    cls,
+    nl, nl,
     bon_ou_mauvais_mapping(GoodOrBad, GoodOrBadText),
     (GoodOrBad < 0 ; GoodOrBad > 2 -> 
         handle_bon_ou_mauvais_question
@@ -130,36 +109,35 @@ handle_bon_ou_mauvais_question :-
 
 handle_budget_question :- 
     write('Quel est votre budget pour la sortie au cinema?'), nl,
-    write('Veuillez entrer un montant en dollars:'), nl,
+    write('Veuillez entrer un montant en dollars sans décimales suivi d\'un point:'), nl,
     read(Budget),
-    cls,
+    nl, nl,
     (Budget < 0 -> 
         write('Erreur: Veuillez entrer un montant valide en dollars. ( > 0 )'), nl,
         handle_budget_question
     ;
         asserta(fait(budget(Budget))),
         (Budget > 9 -> 
-            handle_bon_ou_mauvais_question,
-            write('---- Fin du questionnaire ----'), nl, nl
+            handle_bon_ou_mauvais_question
         ; 
-            write('---- Fin du questionnaire ----'), nl, nl
+            true
         )
     ).
 
 write_occasion(Num, Occasion) :- 
-    typewriter_write(Num), write('. '), typewriter_write(Occasion), nl.
+    write(Num), write('. '), write(Occasion), nl.
 
 write_enfant(Num, Enfant) :- 
-    typewriter_write(Num), write('. '), typewriter_write(Enfant), nl.
+    write(Num), write('. '), write(Enfant), nl.
 
 write_aime_vieux_films(Num, ClassicOrNewer) :- 
-    typewriter_write(Num), write('. '), typewriter_write(ClassicOrNewer), nl.
+    write(Num), write('. '), write(ClassicOrNewer), nl.
 
 write_bon_ou_mauvais(Num, GoodOrBad) :- 
-    typewriter_write(Num), write('. '), typewriter_write(GoodOrBad), nl.
+    write(Num), write('. '), write(GoodOrBad), nl.
 
 write_budget(Budget) :- 
-    typewriter_write('Votre budget est de '), typewriter_write(Budget), typewriter_write('$'), nl.
+    write('Votre budget est de '), write(Budget), write('$'), nl.
 
 clear_all_facts :- 
     retractall(fait(_)).
@@ -167,24 +145,16 @@ clear_all_facts :-
 % Interface principal
 start_questions :- 
     clear_all_facts,
-    cls,
-    typewriter_write('Bienvenue dans le système de planification de sortie au cinema!'), nl,
-    typewriter_write('Veuillez répondre aux questions suivantes pour obtenir des recommandations de films.'), nl,
+    nl, nl,
+    write('Bienvenue dans le système de planification de sortie au cinema!'), nl,
+    write('Veuillez répondre aux questions suivantes pour obtenir des recommandations de films.'), nl,
     
-    nl, typewriter_write('(Appuyez sur une touche pour continuer...)'), nl,
+    nl, write('(Appuyez sur la touche espace pour continuer...)'), nl,
     get_single_char(_),
 
-    cls,
-    typewriter_write('\n Quel est votre nom?'), nl,
-    read_line_to_string(user_input, Name),
-
-    cls,
-    typewriter_write('Bonjour '), typewriter_write(Name), nl,
-    nl, write('(Appuyez sur une touche pour continuer...)'), nl,
-    get_single_char(_),
+    nl, nl,
 
     handle_occasion_question,
-
     find_movies_and_show.
 
 afficher_films([]).
@@ -223,6 +193,7 @@ find_movies_and_show :-
     ), FilmFiltre),
 
     snack(Collation, Description, Prix),
+    
     write('Voici les recommandations'), nl, nl,
     write('Collation incluse : '), write(Description), write('  -  '), write(Prix), write(' $'), nl, 
     format('---------------------------~n'),
