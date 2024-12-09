@@ -112,8 +112,8 @@ handle_budget_question :-
     write('Veuillez entrer un montant en dollars sans décimales suivi d\'un point:'), nl,
     read(Budget),
     nl, nl,
-    (Budget < 0 -> 
-        write('Erreur: Veuillez entrer un montant valide en dollars. ( > 0 )'), nl,
+    (Budget < 7.50 -> 
+        write('Erreur: Veuillez entrer un montant valide en dollars. ( > 7.50 )'), nl,
         handle_budget_question
     ;
         asserta(fait(budget(Budget))),
