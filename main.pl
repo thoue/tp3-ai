@@ -4,9 +4,6 @@
 :- consult('movies.pl').
 :- consult('shell.pl').
 
-end_question :-
-    true.
-
 %Fonctions d'occasion
 occasion_mapping(1, famille).
 occasion_mapping(2, couple).
@@ -19,11 +16,11 @@ handle_occasion_question :-
     write_occasion(2, 'En couple'),
     write_occasion(3, 'Entre amis'),
     write_occasion(4, 'Seul'),
-    write('Veuillez choisir un numéro correspondant à une occasion:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point (ex: 1.):'), nl,
     read(Occasion),
     nl, nl,
     (Occasion < 1 ; Occasion > 4 -> 
-        write('Veuillez entrer un des choix proposés...'), nl,
+        write('Erreur : Veuillez entrer un des choix proposés'), nl,
         handle_occasion_question
     ; 
         occasion_mapping(Occasion, OccasionText),
@@ -46,20 +43,21 @@ handle_enfant_question :-
     write('Question : Est-ce qu\'il y a des enfants dans le groupe?'), nl,
     write_enfant(1, 'Oui'),
     write_enfant(2, 'Non'),
-    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point (ex: 1.):'), nl,
     read(Enfant),
     nl, nl,
-    enfant_mapping(Enfant, EnfantText),
     (Enfant < 1 ; Enfant > 2 -> 
+        write('Erreur : Veuillez entrer un des choix proposés'), nl,
         handle_enfant_question
     ; 
+        enfant_mapping(Enfant, EnfantText),
         (retractall(enfant(_)), asserta(fait(enfant(EnfantText)))),
         handle_taille_du_groupe_question
     ).
 
 handle_taille_du_groupe_question :- 
     write('Question : Combien de personnes serez-vous?'), nl,
-    write('Veuillez entrer un nombre de personnes suivi d\'un point:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point (ex: 1.):'), nl,
     read(GroupSize),
     (GroupSize < 1 -> 
         write('Erreur: Veuillez entrer un nombre valide de personnes. ( > 0 )'), nl,
@@ -78,13 +76,13 @@ handle_aime_vieux_films_question :-
     write('Question : Aimez-vous les vieux films?'), nl,
     write_aime_vieux_films(1, 'Oui'),
     write_aime_vieux_films(2, 'Non'),
-    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point (ex: 1.):'), nl,
     read(LikeOldMovies),
     nl, nl,
-    vieux_films_mapping(LikeOldMovies, LikeOldMoviesText),
     (LikeOldMovies < 1 ; LikeOldMovies > 2 -> 
         handle_aime_vieux_films_question
     ;
+        vieux_films_mapping(LikeOldMovies, LikeOldMoviesText),
         asserta(fait(aime_vieux_films(LikeOldMoviesText))),
         handle_budget_question
     ).
@@ -97,19 +95,20 @@ handle_bon_ou_mauvais_question :-
     write('Question : Voulez-vous voir un film de qualité ou médiocre?'), nl,
     write_bon_ou_mauvais(1, 'Qualité'),
     write_bon_ou_mauvais(2, 'Médiocre'),
-    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point:'), nl,
+    write('Veuillez choisir un numéro correspondant à une réponse suivi d\'un point (ex: 1.):'), nl,
     read(GoodOrBad),
     nl, nl,
-    bon_ou_mauvais_mapping(GoodOrBad, GoodOrBadText),
+
     (GoodOrBad < 0 ; GoodOrBad > 2 -> 
         handle_bon_ou_mauvais_question
     ;
+        bon_ou_mauvais_mapping(GoodOrBad, GoodOrBadText),
         (retractall(bon_ou_mauvais(_)), asserta(fait(bon_ou_mauvais(GoodOrBadText))))
     ).
 
 handle_budget_question :- 
     write('Quel est votre budget pour la sortie au cinema?'), nl,
-    write('Veuillez entrer un montant en dollars sans décimales suivi d\'un point:'), nl,
+    write('Veuillez entrer un montant en dollars sans décimales suivi d\'un point (ex : 14. pour 14$):'), nl,
     read(Budget),
     nl, nl,
     (Budget < 7.50 -> 

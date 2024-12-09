@@ -36,8 +36,8 @@ movie('Indiana Jones and the Raiders of the Lost Ark', limoilou, aventure, pg, p
 
 % snacks(Name, Price).
 snack(aucun, 'Aucune collation incluse', 0.00).
-snack(combo1, 'Petit popcorn et soda', 2.50).
-snack(combo2, 'Petit popcorn, bonbon et soda', 5.00).
-snack(combo3, 'Grand popcorn, bonbon et soda', 7.50).
-snack(combo4, 'Ultime Nachos, grand popcorn et hotdog', 12.50).
+snack(combo1, 'Combo 1 - Petit popcorn et soda', 2.50).
+snack(combo2, 'Combo 2 - Petit popcorn, bonbon et soda', 5.00).
+snack(combo3, 'Combo 3 - Grand popcorn, bonbon et soda', 7.50).
+snack(combo4, 'Combo 4 - Ultime Nachos, grand popcorn et hotdog', 12.50).
 
