@@ -1,0 +1,95 @@
+
+# Guide d'utilisation du système de planification de sorties au cinéma
+---
+
+## Lancement du programme
+
+1. **Chargez le programme** :
+   - Ouvrez SWI-Prolog.
+   - Chargez le fichier principal en tapant la commande suivante :
+     ?- consult('main.pl').
+     
+
+2. **Démarrez le système** :
+   - Une fois le fichier chargé, démarrez le programme avec :
+     ?- start_questions.
+
+---
+
+## Interaction avec le programme
+
+Le programme vous posera une série de questions pour recueillir vos préférences. Voici comment y répondre :
+
+### 1. Occasion  
+   Choisissez le type de sortie :  
+   - 1. En famille  
+   - 2. En couple  
+   - 3. Entre amis  
+   - 4. Seul  
+
+   Tapez le numéro correspondant, suivi d’un point (exemple : `1.`).  
+   
+   **Remarque :** Si vous choisissez "En couple" ou "Seul", certaines questions seront automatiquement sautées.
+
+### 2. Enfants  
+   Si nécessaire, indiquez si des enfants sont présents dans le groupe :  
+   - 1. Oui  
+   - 2. Non  
+
+   Entrez le numéro correspondant.
+
+### 3. Taille du groupe  
+   Entrez le nombre total de participants au cinéma (exemple : `3.`).  
+
+### 4. Préférence pour les vieux films  
+   Indiquez si vous aimez les films sortis avant l’an 2000 :  
+   - 1. Oui  
+   - 2. Non  
+
+   Entrez le numéro correspondant.
+
+### 5. Qualité des films  
+   Choisissez entre :  
+   - 1. Film de qualité  
+   - 2. Film médiocre  
+
+   Entrez le numéro correspondant.
+
+### 6. Budget  
+   Entrez votre budget en dollars (minimum 7.50), suivi d’un point (exemple : `15.`).  
+
+---
+
+## Résultats
+
+Une fois toutes les questions répondues, le programme affichera :
+1. Une liste de films correspondant à vos critères, avec :
+   - Titre
+   - Cinéma
+   - Genre
+   - Cote
+   - Heures de projection
+   - Année de sortie
+   - Jours de disponibilité
+
+2. Une suggestion de collation adaptée à votre budget.
+
+
+## Notez bien
+
+- Si aucune réponse valide n’est fournie, le programme redemandera la question.
+- Avec un budget inférieur à 7.50 $, aucune recommandation ne sera affichée.
+- Toutes les réponses doivent être fournies dans le format exact demandé (exemple : pas de décimales pour la taille du groupe).
+
+---
+
+## Pour tester
+
+- Assurez-vous que les fichiers suivants sont dans le même répertoire :  
+  - `movies.pl`  
+  - `shell.pl`  
+  - `main.pl` (fichier principal)
+
+
+
+Suivez ce guide pour naviguer facilement dans le programme !
